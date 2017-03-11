@@ -1,44 +1,36 @@
-# SHOP
+# MAGSHOP
 
 ### Setup
 
 ##### Prerequisites
 
-Install [polymer-cli](https://github.com/Polymer/polymer-cli):
-(Need at least npm v0.3.0)
+Install global utilities:
 
-    npm install -g polymer-cli
+    npm install -g bower polymer-cli@next
 
 
-##### Setup
-    # Using CLI
-    mkdir shop
-    cd shop
-    polymer init shop
-    
-    # Or cloning direct from GitHub
-    git clone https://github.com/Polymer/shop.git
-    cd shop
-    bower install
+##### Install
+
+Install packages
+
+    npm install
+
+(this will install bower packages too in a postinstall hook)
 
 ### Start the development server
 
-    polymer serve
+    npm run serve
 
-### Run web-component-tester tests
-
-    polymer test
-
-### Build
-
-    polymer build
+This will serve the app on localhost:8081
 
 ### Test the build
 
-This command serves the minified version of the app in an unbundled state, as it would be served by a push-compatible server:
+    npm run serve-prod
 
-    polymer serve build/unbundled
-    
-This command serves the minified version of the app generated using fragment bundling:
+This will build the app and serve it on localhost:8081
 
-    polymer serve build/bundled
+### Deploy the shop
+
+    npm run deploy
+
+This will build the app and deploy it using `zeit.now`

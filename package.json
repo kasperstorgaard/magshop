@@ -6,12 +6,11 @@
   "directories": {
     "test": "test"
   },
-  "devDependencies": {
-    "http-server": "^0.9.0"
-  },
   "scripts": {
     "serve": "polymer serve",
-    "deploy": "polymer build && now ./build/magshop"
+    "serve-prod": "polymer build && polymer serve build/magshop",
+    "deploy": "polymer build && now ./build/magshop",
+    "postinstall": "bower install"
   },
   "repository": {
     "type": "git",
