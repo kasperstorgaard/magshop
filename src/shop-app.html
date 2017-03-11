@@ -18,9 +18,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="shop-category-data.html">
+<link rel="import" href="./data/shop-category-data.html">
 <!-- Since 'home' is the default route, eagerly load it. -->
-<link rel="import" href="shop-home.html">
+<link rel="import" href="./pages/home/shop-home.html">
 
 <dom-module id="shop-app">
 
@@ -418,7 +418,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             // eagerly load the 404 page definition
             var cb = this._pageLoaded.bind(this, Boolean(oldPage));
             this.importHref(
-              this.resolveUrl('shop-' + page + '.html'),
+              this.resolveUrl('pages/' + page + '/shop-' + page + '.html'),
               cb, cb, true);
           }
         }

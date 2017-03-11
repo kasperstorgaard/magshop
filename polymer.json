@@ -2,10 +2,10 @@
   "entrypoint": "index.html",
   "shell": "src/shop-app.html",
   "fragments": [
-    "src/shop-list.html",
-    "src/shop-detail.html",
-    "src/shop-cart.html",
-    "src/shop-checkout.html",
+    "src/pages/list/shop-list.html",
+    "src/pages/detail/shop-detail.html",
+    "src/pages/cart/shop-cart.html",
+    "src/pages/checkout/shop-checkout.html",
     "src/lazy-resources.html"
   ],
   "sources": [
