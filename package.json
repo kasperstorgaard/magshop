@@ -1,0 +1,26 @@
+{
+  "name": "magshop",
+  "version": "0.1.0",
+  "description": "A polymer shop based website for my brother",
+  "main": "service-worker.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "http-server": "^0.9.0"
+  },
+  "scripts": {
+    "serve": "polymer serve",
+    "deploy": "polymer build && now ./build/unbundled"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kasperstorgaard/magshop.git"
+  },
+  "author": "kasperstorgaard",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kasperstorgaard/magshop/issues"
+  },
+  "homepage": "https://github.com/kasperstorgaard/magshop#readme"
+}
