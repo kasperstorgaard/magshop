@@ -195,16 +195,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         text-decoration: underline;
       }
 
-      .demo-label {
-        box-sizing: border-box;
-        width: 120px;
-        padding: 6px;
-        margin: 8px auto 0;
-        background-color: var(--app-primary-color);
-        color: white;
-        text-transform: uppercase;
-      }
-
       /* small screen */
       @media (max-width: 767px) {
         :host {
@@ -323,8 +313,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </iron-pages>
 
     <footer>
-      <a href="https://www.polymer-project.org/1.0/toolbox/">Made by Polymer</a>
-      <div class="demo-label">Demo Only</div>
     </footer>
 
     <!-- a11y announcer -->
@@ -333,9 +321,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-
-    // performance logging
-    window.performance && performance.mark && performance.mark('shop-app - before register');
 
     Polymer({
 
@@ -377,12 +362,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'clear-cart': '_onClearCart',
         'change-section': '_onChangeSection',
         'announce': '_onAnnounce',
-        'dom-change': '_domChange',
         'show-invalid-url-warning': '_onFallbackSelectionTriggered'
       },
 
       created: function() {
-        window.performance && performance.mark && performance.mark('shop-app.created');
         // Custom elements polyfill safe way to indicate an element has been upgraded.
         this.removeAttribute('unresolved');
       },
@@ -495,7 +478,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         // Announce the page's title
         if (detail.title) {
-          document.title = detail.title + ' - SHOP';
+          document.title = detail.title + ' - MAGSHOP';
           this._announce(detail.title + ', loaded');
         }
       },
@@ -536,18 +519,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.debounce('_a11yAnnouncer', function() {
           this._a11yLabel = message;
         }, 100);
-      },
-
-      // This is for performance logging only.
-      _domChange: function(e) {
-        if (window.performance && performance.mark && !this.__loggedDomChange) {
-          var target = e.composedPath()[0];
-          var host = target.getRootNode().host;
-          if (host && host.localName.match(this.page)) {
-            this.__loggedDomChange = true;
-            performance.mark(host.localName + '.domChange');
-          }
-        }
       },
 
       _onFallbackSelectionTriggered: function() {
