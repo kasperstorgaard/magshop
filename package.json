@@ -11,7 +11,7 @@
   },
   "scripts": {
     "serve": "polymer serve",
-    "deploy": "polymer build && now ./build/unbundled"
+    "deploy": "polymer build && now ./build/magshop"
   },
   "repository": {
     "type": "git",
