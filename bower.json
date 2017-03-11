@@ -1,9 +1,7 @@
 {
-  "name": "shop",
-  "version": "2.0.0",
-  "authors": [
-    "The Polymer Authors"
-  ],
+  "name": "magshop",
+  "version": "0.1.0",
+  "authors": ["kasperstorgaard"],
   "private": true,
   "dependencies": {
     "polymer": "polymer/polymer#^2.0.0-rc.1",
