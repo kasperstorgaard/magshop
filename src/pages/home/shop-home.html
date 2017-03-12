@@ -116,33 +116,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
+    class ShopHome extends Polymer.Element {
+      static get is() {
+        return 'shop-home';
+      }
 
-    Polymer({
+      static get properties() {
+        return {
+          categories: {
+            type: Array
+          },
 
-      is: 'shop-home',
+          visible: {
+            type: Boolean,
+            observer: '_visibleChanged'
+          }
+        };
+      }
 
-      properties: {
-
-        categories: {
-          type: Array
-        },
-
-        visible: {
-          type: Boolean,
-          observer: '_visibleChanged'
-        }
-
-      },
-
-      _visibleChanged: function(visible) {
+      _visibleChanged(visible) {
         if (visible) {
           const detail = { title: 'Home' };
           this.dispatchEvent(new CustomEvent('change-section', { detail, bubbles: true }));
         }
       }
+    }
 
-    });
-
+    customElements.define(ShopHome.is, ShopHome);
   </script>
 
 </dom-module>
