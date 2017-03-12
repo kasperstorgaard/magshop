@@ -13,7 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="shop-category-data">
 
   <script>
-  (function() {
+  (() => {
     const categoryList = [
       {
         name: 'mens_outerwear',
@@ -107,10 +107,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         this._getResource({
           url: '/data/' + category.name + '.json',
-          onLoad: function(e) {
+          onLoad: (e) => {
             this.set('category.items', JSON.parse(e.target.responseText));
           },
-          onError: function(e) {
+          onError: (e) => {
             this._setFailure(true);
           }
         }, attempts);
@@ -122,7 +122,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         xhr.addEventListener('error', (e) => {
           // Flaky connections might fail fetching resources
           if (attempts > 1) {
-            this.debounce('_getResource', this._getResource.bind(this, rq, attempts - 1), 200);
+            Polymer.Base.debounce('category-data#getResource', this._getResource.bind(this, rq, attempts - 1), 200);
           } else {
             rq.onError.call(this, e);
           }
