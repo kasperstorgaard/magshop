@@ -30,14 +30,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </test-fixture>
 
   <script>
-    suite('shop-home tests', function() {
-      var home;
+    suite('shop-home tests', () => {
+      const home;
 
-      setup(function() {
+      setup(() => {
         home = fixture('basic');
       });
 
-      test('Item lengths should be equalled', function(done) {
+      test('Item lengths should be equalled', (done) => {
         // Test categories property
         home.categories = [
           {name: 'furniture', title: 'Furniture'},
@@ -47,8 +47,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         // Data bindings will stamp out new DOM asynchronously
         // so wait to check for updates
-        flush(function() {
-          var items = Polymer.dom(home.root).querySelectorAll('.item');
+        flush(() => {
+          const items = Polymer.dom(home.root).querySelectorAll('.item');
           assert.equal(home.categories.length, items.length);
           done();
         });
