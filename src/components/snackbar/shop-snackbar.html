@@ -60,19 +60,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
 
-    Polymer({
-      is: 'shop-snackbar',
+    class ShopSnackbar extends Polymer.Element {
+      static get is() {
+        return 'shop-snackbar';
+      }
 
-      open: function() {
-        Polymer.dom.flush();
+      open() {
         this.offsetHeight && this.classList.add('opened');
         this.debounce('_close', this.close, 4000);
-      },
+      }
 
-      close: function() {
+      close() {
         this.classList.remove('opened');
       }
-    });
+
+    }
+
+    customElements.define(ShopSnackbar.is, ShopSnackbar);
 
   </script>
 
