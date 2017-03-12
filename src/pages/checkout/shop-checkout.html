@@ -421,84 +421,88 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
 
-    Polymer({
+    class ShopCheckout {
+      static get is() {
+        return 'shop-checkout'
+      }
 
-      is: 'shop-checkout',
+      static get properties() {
+        return {
+          /**
+          * The route for the state. e.g. `success` and `error` are mounted in the
+          * `checkout/` route.
+          */
+          route: {
+            type: Object,
+            notify: true
+          },
 
-      properties: {
+          /**
+          * The total price of the contents in the user's cart.
+          */
+          total: Number,
 
-        /**
-         * The route for the state. e.g. `success` and `error` are mounted in the
-         * `checkout/` route.
-         */
-        route: {
-          type: Object,
-          notify: true
-        },
+          /**
+          * The state of the form. Valid values are:
+          * `init`, `success` and `error`.
+          */
+          state: {
+            type: String,
+            value: 'init'
+          },
 
-        /**
-         * The total price of the contents in the user's cart.
-         */
-        total: Number,
+          /**
+          * An array containing the items in the cart.
+          */
+          cart: Array,
 
-        /**
-         * The state of the form. Valid values are:
-         * `init`, `success` and `error`.
-         */
-        state: {
-          type: String,
-          value: 'init'
-        },
+          /**
+          * The server's response.
+          */
+          response: Object,
 
-        /**
-         * An array containing the items in the cart.
-         */
-        cart: Array,
+          /**
+          * If true, the user must enter a billing address.
+          */
+          hasBillingAddress: {
+            type: Boolean,
+            value: false
+          },
 
-        /**
-         * The server's response.
-         */
-        response: Object,
+          /**
+          * If true, shop-checkout is currently visible on the screen.
+          */
+          visible: {
+            type: Boolean,
+            observer: '_visibleChanged'
+          },
 
-        /**
-         * If true, the user must enter a billing address.
-         */
-        hasBillingAddress: {
-          type: Boolean,
-          value: false
-        },
+          /**
+          * True when waiting for the server to repond.
+          */
+          waiting: {
+            type: Boolean,
+            readOnly: true,
+            reflectToAttribute: true
+          },
 
-        /**
-         * If true, shop-checkout is currently visible on the screen.
-         */
-        visible: {
-          type: Boolean,
-          observer: '_visibleChanged'
-        },
+          /**
+          * True when waiting for the server to repond.
+          */
+          _hasItems: {
+            type: Boolean,
+            computed: '_computeHasItem(cart.length)'
+          }
+        };
+      }
 
-        /**
-         * True when waiting for the server to repond.
-         */
-        waiting: {
-          type: Boolean,
-          readOnly: true,
-          reflectToAttribute: true
-        },
+      static get observers() {
+        return [
+          '_updateState(routeActive, routeData)'
+        ];
+      }
 
-        /**
-         * True when waiting for the server to repond.
-         */
-        _hasItems: {
-          type: Boolean,
-          computed: '_computeHasItem(cart.length)'
-        }
-      },
-
-      observers: [
-        '_updateState(routeActive, routeData)'
-      ],
-
-      _submit: function(e) {
+      _submit(e) {
         if (this._validateForm()) {
           // To send the form data to the server:
           // 2) Remove the code below.
@@ -506,7 +510,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           this.$.checkoutForm.fire('iron-form-presubmit', null, { bubbles: false });
 
-          this.debounce('_submitForm', function() {
+          Polymer.Base.debounce('_submitForm', () => {
             this.$.checkoutForm.fire('iron-form-response', {
               response: {
                 success: 1,
@@ -517,24 +521,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           // this.$.checkoutForm.submit();
         }
-      },
+      }
 
       /**
        * Sets the valid state and updates the location.
        */
-      _pushState: function(state) {
+      _pushState(state) {
         this._validState = state;
         this.set('route.path', state);
-      },
+      }
 
       /**
        * Checks that the `:state` subroute is correct. That is, the state has been pushed
        * after receiving response from the server. e.g. Users can only go to `/checkout/success`
        * if the server responsed with a success message.
        */
-      _updateState: function(active, routeData) {
+      _updateState(active, routeData) {
         if (active && routeData) {
-          var state = routeData.state;
+          const {state} = routeData;
           if (this._validState === state) {
             this.state = state;
             this._validState = '';
@@ -542,70 +546,74 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
         this.state = 'init';
-      },
+      }
 
       /**
        * Sets the initial state.
        */
-      _reset: function() {
-        var form = this.$.checkoutForm;
+      _reset() {
+        const form = this.$.checkoutForm;
 
         this._setWaiting(false);
         form.reset();
 
-        var nativeForm = form._form;
+        const nativeForm = form._form;
         if (!nativeForm) {
           return;
         }
 
         // Remove the `aria-invalid` attribute from the form inputs.
-        for (var el, i = 0; el = nativeForm.elements[i], i < nativeForm.elements.length; i++) {
-          el.removeAttribute('aria-invalid');
-        }
-      },
+        nativeForm.elements.forEach(el => el.removeAttribute('aria-invalid'));
+      }
 
       /**
        * Validates the form's inputs and adds the `aria-invalid` attribute to the inputs
        * that don't match the pattern specified in the markup.
        */
-      _validateForm: function() {
-        var form = this.$.checkoutForm;
-        var firstInvalid = false;
-        var nativeForm = form._form;
+      _validateForm() {
+        const form = this.$.checkoutForm;
+        const firstInvalid = false;
+        const nativeForm = form._form;
 
-        for (var el, i = 0; el = nativeForm.elements[i], i < nativeForm.elements.length; i++) {
-          if (el.checkValidity()) {
-            el.removeAttribute('aria-invalid');
-          } else {
-            if (!firstInvalid) {
-              // announce error message
-              if (el.nextElementSibling) {
-                const detail = { title: el.nextElementSibling.getAttribute('error-message') };
-                this.dispatchEvent(new CustomEvent('announce', { detail, bubbles: true, composed: true }));
-              }
-              if (el.scrollIntoViewIfNeeded) {
-                // safari, chrome
-                el.scrollIntoViewIfNeeded();
-              } else {
-                // firefox, edge, ie
-                el.scrollIntoView(false);
-              }
-              el.focus();
-              firstInvalid = true;
-            }
+        const validElements = nativeForm.elements.filter(el => el.checkValidity());
+        const invalidElements = nativeForm.elements.filter(el => !el.checkValidity());
+
+        nativeForm.elements.forEach(el => {
+          if (invalidElements.includes(el)) {
             el.setAttribute('aria-invalid', 'true');
+          } else {
+            el.removeAttribute('aria-invalid');
           }
+        })
+
+        if (invalidElements[0]) {
+          this._notifyInvalid(invalidElements[0]);
         }
-        return !firstInvalid;
-      },
+      }
+
+      _notifyInvalid(el) {
+          // announce error message
+          if (el.nextElementSibling) {
+            const detail = { title: el.nextElementSibling.getAttribute('error-message') };
+            this.dispatchEvent(new CustomEvent('announce', { detail, bubbles: true, composed: true }));
+          }
+          if (el.scrollIntoViewIfNeeded) {
+            // safari, chrome
+            el.scrollIntoViewIfNeeded();
+          } else {
+            // firefox, edge, ie
+            el.scrollIntoView(false);
+          }
+          el.focus();
+      }
 
       /**
        * Adds the cart data to the payload that will be sent to the server
        * and updates the UI to reflect the waiting state.
        */
-      _willSendRequest: function(e) {
-        var form = e.target;
-        var body = form.ajax && form.ajax.body;
+      _willSendRequest(e) {
+        const form = e.target;
+        const body = form.ajax && form.ajax.body;
 
         this._setWaiting(true);
 
@@ -617,18 +625,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         body.cartItemsId = [];
         body.cartItemsQuantity = [];
 
-        this.cart.forEach(function(cartItem) {
+        this.cart.forEach((cartItem) => {
           body.cartItemsId.push(cartItem.item.name);
           body.cartItemsQuantity.push(cartItem.quantity);
         });
-      },
+      }
 
       /**
        * Handles the response from the server by checking the response status
        * and transitioning to the success or error UI.
        */
-      _didReceiveResponse: function(e) {
-        var response = e.detail.response;
+      _didReceiveResponse(e) {
+        const {response} = e.detail;
 
         this.response = response;
         this._setWaiting(true);
@@ -640,29 +648,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         } else {
           this._pushState('error');
         }
-      },
+      }
 
-      _toggleBillingAddress: function(e) {
+      _toggleBillingAddress(e) {
         this.hasBillingAddress = e.target.checked;
 
         if (this.hasBillingAddress) {
           this.$.billAddress.focus();
         }
-      },
+      }
 
-      _computeHasItem: function(cartLength) {
+      _computeHasItem(cartLength) {
         return cartLength > 0;
-      },
+      }
 
-      _formatPrice: function(total) {
-        return isNaN(total) ? '' : '$' + total.toFixed(2);
-      },
+      _formatPrice(total) {
+        return isNaN(total) ? '' : `$${total.toFixed(2)}`;
+      }
 
-      _getEntryTotal: function(entry) {
+      _getEntryTotal(entry) {
         return this._formatPrice(entry.quantity * entry.item.price);
-      },
+      }
 
-      _visibleChanged: function(visible) {
+      _visibleChanged(visible) {
         if (!visible) {
           return;
         }
@@ -672,9 +680,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         const detail = { title: 'Checkout' };
         this.dispatchEvent(new CustomEvent('change-section', { detail, bubbles: true, composed: true }));
       }
+    }
 
-    });
-
+    customElements.define(ShopCheckout.is, ShopCheckout);
   </script>
 
 </dom-module>
