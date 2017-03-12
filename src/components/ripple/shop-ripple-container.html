@@ -26,44 +26,53 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <slot></slot>
   </template>
   <script>
-    Polymer({
-      is: 'shop-ripple-container',
 
-      behaviors: [
-        Polymer.PaperRippleBehavior
-      ],
+    class ShopRippleContainer extends Polymer.mixinBehaviors([
+      Polymer.PaperRippleBehavior
+    ], Polymer.Element) {
 
-      listeners: {
-        'down': '_rippleDown',
-        'up': '_rippleUp',
-      },
+      static get is() {
+       return 'shop-ripple-container'
+      }
 
-      created: function() {
+      static get listeners() {
+        return {
+          down: '_rippleDown',
+          up: '_rippleUp'
+        }
+      }
+
+      constructor() {
+        super();
         this.addEventListener('focus', this._onFocus.bind(this), true);
         this.addEventListener('blur', this._onBlur.bind(this), true);
         this._isDown = false;
-      },
+      }
 
-      _onFocus: function(event) {
+      _onFocus(event) {
         // Prevent second ripple when clicking causes both focus and down.
         if (!this._isDown) {
           this._rippleDown(event);
         }
-      },
+      }
 
-      _onBlur: function(event) {
+      _onBlur(event) {
         this._rippleUp(event);
-      },
+      }
 
-      _rippleDown: function(event) {
+      _rippleDown(event) {
         this._isDown = true;
         this.getRipple().downAction(event);
-      },
+      }
 
-      _rippleUp: function(event) {
+      _rippleUp(event) {
         this._isDown = false;
         this.getRipple().upAction(event);
-      },
-    });
+      }
+
+    }
+
+    customElements.define(ShopRippleContainer.is, ShopRippleContainer);
+
   </script>
 </dom-module>
