@@ -122,18 +122,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
       }
 
-      static get hostAttributes() {
-        return {
-          role: 'dialog',
-          'aria-modal': 'true'
-        }
-      }
+      connectedCallback() {
+        super.connectedCallback();
 
-      static get listeners() {
-        return {
-          transitionend: '_transitionEnd',
-          'iron-overlay-canceled': '_onCancel'
-        };
+        this.setAttribute('role', 'dialog');
+        this.setAttribute('aria-modal', 'true');
+        this.addEventListener('transitionend', this._transitionEnd.bind(this));
+        this.addEventListener('iron-overlay-canceled', this._onCancel.bind(this));
       }
 
       _renderOpened() {
