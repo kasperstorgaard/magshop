@@ -204,43 +204,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
+    class ShopDetail extends Polymer.Element {
+      static get is() {
+        return 'shop-detail';
+      }
 
-    Polymer({
+      static get properties() {
+        return {
+          item: Object,
 
-      is: 'shop-detail',
+          route: Object,
 
-      properties: {
+          routeData: Object,
 
-        item: Object,
+          visible: {
+            type: Boolean,
+            value: false
+          },
 
-        route: Object,
+          offline: {
+            type: Boolean,
+            observer: '_offlineChanged'
+          },
 
-        routeData: Object,
+          failure: Boolean
+        };
+      }
 
-        visible: {
-          type: Boolean,
-          value: false
-        },
+      static get observers() {
+        return [
+          '_itemChanged(item, visible)'
+        ];
+      }
 
-        offline: {
-          type: Boolean,
-          observer: '_offlineChanged'
-        },
-
-        failure: Boolean
-
-      },
-
-      observers: [
-        '_itemChanged(item, visible)'
-      ],
-
-      _itemChanged: function(item, visible) {
+      _itemChanged(item, visible) {
         if (visible) {
-          this.debounce('item-change', function() {
+          Polymer.Base.debounce('detail#item-change', () => {
             // The item description contains escaped HTML (e.g. "&lt;br&gt;"), so we need to
             // unescape it ("<br>") and set it as innerHTML.
-            var text = item ? item.description : '';
+            const text = item ? item.description : '';
             this.$.desc.innerHTML = this._unescapeText(text);
 
             // Reset the select menus.
@@ -251,19 +253,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.dispatchEvent(new CustomEvent('change-section', { detail, bubbles: true, composed: true }));
           });
         }
-      },
+      }
 
-      _unescapeText: function(text) {
-        var elem = document.createElement('textarea');
-        elem.innerHTML = text;
-        return elem.textContent;
-      },
+      _unescapeText(text) {
+        const el = document.createElement('textarea');
+        el.innerHTML = text;
+        return el.textContent;
+      }
 
-      _formatPrice: function(price) {
+      _formatPrice(price) {
         return price ? '$' + price.toFixed(2) : '';
-      },
+      }
 
-      _addToCart: function() {
+      _addToCart() {
         // This event will be handled by shop-app.
         const detail = {
           item: this.item,
@@ -271,24 +273,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           size: this.$.sizeSelect.value
         };
         this.dispatchEvent(new CustomEvent('add-cart-item', { detail, bubbles: true, composed: true }));
-      },
+      }
 
-      _isDefined: function(item) {
+      _isDefined(item) {
         return item != null;
-      },
+      }
 
-      _tryReconnect: function() {
+      _tryReconnect() {
         this.$.categoryData.refresh();
-      },
+      }
 
-      _offlineChanged: function(offline) {
+      _offlineChanged(offline) {
         if (!offline) {
           this._tryReconnect();
         }
       }
+    }
 
-    });
-
+    customElements.define(ShopDetail.is, ShopDetail);
   </script>
 
 </dom-module>
