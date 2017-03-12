@@ -67,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       open() {
         this.offsetHeight && this.classList.add('opened');
-        this.debounce('_close', this.close, 4000);
+        Polymer.Base.debounce('snackbar#close', this.close, 4000);
       }
 
       close() {
