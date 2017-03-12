@@ -63,17 +63,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
 
-    Polymer({
-      is: 'shop-network-warning',
+    class ShopNetworkWarning extends Polymer.Element {
+      static get is() { return 'shop-network-warning'}
 
-      properties: {
-        offline: Boolean
-      },
+      static get properties() {
+        return {
+          offline: Boolean
+        }
+      }
 
-      _tryReconnect: function() {
+      _tryReconnect() {
         this.fire('try-reconnect', null, { bubbles: false });
       }
-    });
+    }
+
+    customElements.define(ShopNetworkWarning.is, ShopNetworkWarning);
 
   </script>
 
