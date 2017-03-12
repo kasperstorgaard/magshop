@@ -35,18 +35,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        return 'shop-ripple-container'
       }
 
-      static get listeners() {
-        return {
-          down: '_rippleDown',
-          up: '_rippleUp'
-        }
-      }
-
       constructor() {
         super();
         this.addEventListener('focus', this._onFocus.bind(this), true);
         this.addEventListener('blur', this._onBlur.bind(this), true);
         this._isDown = false;
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+
+        this.addEventListener('down', this._rippleDown.bind(this));
+        this.addEventListener('up', this._rippleUp.bind(this));
       }
 
       _onFocus(event) {
