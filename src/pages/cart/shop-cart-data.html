@@ -28,9 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return {
           cart: {
             type: Array,
-            value: function() {
-              return [];
-            },
+            value: () => [],
             notify: true
           },
           numItems: {
@@ -47,25 +45,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       addItem(detail) {
-        var i = this._indexOfEntry(detail.item.name, detail.size);
-        if (i !== -1) {
-          detail.quantity += this.cart[i].quantity;
+        const idx = this._indexOfEntry(detail.item.name, detail.size);
+        if (idx !== -1) {
+          detail.quantity += this.cart[idx].quantity;
         }
         this.setItem(detail);
       }
 
       setItem(detail) {
-        var i = this._indexOfEntry(detail.item.name, detail.size);
+        const idx = this._indexOfEntry(detail.item.name, detail.size);
         if (detail.quantity === 0) {
           // Remove item from cart when the new quantity is 0.
-          if (i !== -1) {
-            this.splice('cart', i, 1);
+          if (idx !== -1) {
+            this.splice('cart', idx, 1);
           }
         } else {
           // Use Polymer's array mutation methods (`splice`, `push`) so that observers
           // on `cart.splices` are triggered.
-          if (i !== -1) {
-            this.splice('cart', i, 1, detail);
+          if (idx !== -1) {
+            this.splice('cart', idx, 1, detail);
           } else {
             this.push('cart', detail);
           }
@@ -78,9 +76,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _computeNumItems() {
         if (this.cart) {
-          return this.cart.reduce(function(total, entry) {
-            return total + entry.quantity;
-          }, 0);
+          return this.cart.reduce((total, entry) => total + entry.quantity, 0);
         }
 
         return 0;
@@ -88,9 +84,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _computeTotal() {
         if (this.cart) {
-          return this.cart.reduce(function(total, entry) {
-            return total + entry.quantity * entry.item.price;
-          }, 0);
+          return this.cart.reduce((total, entry) => total + entry.quantity * entry.item.price, 0);
         }
 
         return 0;
