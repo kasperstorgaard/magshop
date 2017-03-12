@@ -14,6 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shop-tabs-overlay.html">
 
 <dom-module id="shop-tabs">
+
   <template strip-whitespace>
     <style>
       :host {
@@ -29,28 +30,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply --shop-tab-overlay;
       }
     </style>
+
     <div id="container">
       <shop-tabs-overlay id="overlay"></shop-tabs-overlay>
       <slot></slot>
     </div>
+
   </template>
+
   <script>
-    Polymer({
-      is: 'shop-tabs',
 
-      behaviors: [
-        Polymer.IronSelectableBehavior
-      ],
+    class ShopTabs extends Polymer.mixinBehaviors([
+      Polymer.IronSelectableBehavior
+    ], Polymer.Element) {
 
-      observers: [
+      static get is() {
+        return 'shop-tabs'
+      }
+
+      static get observers() {
+        return [
         '_onSelectedItemChanged(selectedItem)'
-      ],
+        ]
+      }
 
-      _onSelectedItemChanged: function(selectedItem) {
+      _onSelectedItemChanged(selectedItem) {
         if (selectedItem === undefined && this.selected) return;
 
         this.$.overlay.target = selectedItem;
-      },
-    });
+      }
+    }
+
+    customElements.define(ShopTabs.is, ShopTabs);
+
   </script>
+
 </dom-module>
