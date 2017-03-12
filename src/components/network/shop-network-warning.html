@@ -73,7 +73,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _tryReconnect() {
-        this.fire('try-reconnect', null, { bubbles: false });
+        this.dispatchEvent(new CustomEvent('try-reconnect', { bubbles: false, composed: true }));
       }
     }
 

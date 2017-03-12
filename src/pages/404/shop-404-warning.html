@@ -43,11 +43,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <shop-button>
       <a href="/">Go to the home page</a>
     </shop-button>
-
   </template>
+
   <script>
-    Polymer({
-      is: 'shop-404-warning'
-    });
+    class Shop404Warning extends Polymer.Element {
+      static get is() {
+        return 'shop-404-warning';
+      }
+    }
+
+    customElements.define(Shop404Warning.is, Shop404Warning);
   </script>
 </dom-module>

@@ -208,39 +208,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-
-    Polymer({
-
-      is: 'shop-cart-item',
-
-      properties: {
-
-        entry: Object
-
-      },
-
-      _quantityChange: function() {
-        this._setCartItem(parseInt(this.$.quantitySelect.value, 10));
-      },
-
-      _setCartItem: function(quantity) {
-        this.fire('set-cart-item', {
-          item: this.entry.item,
-          quantity: quantity,
-          size: this.entry.size
-        });
-      },
-
-      _formatPrice: function(price) {
-        return price ? '$' + price.toFixed(2) : '';
-      },
-
-      _removeItem: function() {
-        this._setCartItem(0);
+    class  ShopCartItem extends Polymer.Element {
+      static get is() {
+        return 'shop-cart-item';
       }
 
-    });
+      static get properties() {
+        return {
+          entry: Object
+        }
+      }
 
+      _quantityChange() {
+        this._setCartItem(parseInt(this.$.quantitySelect.value, 10));
+      }
+
+      _setCartItem(quantity) {
+        const detail = { item: this.entry.item, quantity: quantity, size: this.entry.size };
+        this.dispatchEvent(new CustomEvent('set-cart-item', { detail, bubbles: true, composed: true }));
+      }
+
+      _formatPrice(price) {
+        return price ? '$' + price.toFixed(2) : '';
+      }
+
+      _removeItem() {
+        this._setCartItem(0);
+      }
+    }
+
+    customElements.define(ShopCartItem.is, ShopCartItem);
   </script>
 
 </dom-module>

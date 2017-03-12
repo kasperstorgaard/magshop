@@ -580,7 +580,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             if (!firstInvalid) {
               // announce error message
               if (el.nextElementSibling) {
-                this.fire('announce', el.nextElementSibling.getAttribute('error-message'));
+                const detail = { title: el.nextElementSibling.getAttribute('error-message') };
+                this.dispatchEvent(new CustomEvent('announce', { detail, bubbles: true, composed: true }));
               }
               if (el.scrollIntoViewIfNeeded) {
                 // safari, chrome
@@ -635,7 +636,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (response.success) {
           this._pushState('success');
           this._reset();
-          this.fire('clear-cart');
+          this.dispatchEvent(new CustomEvent('clear-cart', { bubbles: true, composed: true }));
         } else {
           this._pushState('error');
         }
@@ -668,7 +669,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // Reset the UI states
         this._reset();
         // Notify the page's title
-        this.fire('change-section', { title: 'Checkout' });
+        const detail = { title: 'Checkout' };
+        this.dispatchEvent(new CustomEvent('change-section', { detail, bubbles: true, composed: true }));
       }
 
     });

@@ -247,10 +247,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.quantitySelect.value = '1';
             this.$.sizeSelect.value = 'M';
 
-            this.fire('change-section', {
-              category: item ? item.category : '',
-              title: item ? item.title : ''
-            });
+            const detail = { category: item ? item.category : '', title: item ? item.title : '' };
+            this.dispatchEvent(new CustomEvent('change-section', { detail, bubbles: true, composed: true }));
           });
         }
       },
@@ -267,11 +265,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _addToCart: function() {
         // This event will be handled by shop-app.
-        this.fire('add-cart-item', {
+        const detail = {
           item: this.item,
           quantity: parseInt(this.$.quantitySelect.value, 10),
           size: this.$.sizeSelect.value
-        });
+        };
+        this.dispatchEvent(new CustomEvent('add-cart-item', { detail, bubbles: true, composed: true }));
       },
 
       _isDefined: function(item) {

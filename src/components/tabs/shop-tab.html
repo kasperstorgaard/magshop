@@ -17,6 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template strip-whitespace>
 
     <style>
+
       [hidden] {
         display: none !important;
       }
@@ -40,6 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host(.shop-tabs-overlay-static-above) #overlay {
         display: block;
       }
+
     </style>
 
     <div id="overlay"></div>
@@ -52,14 +54,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
 
     class ShopTab extends Polymer.Element {
-
       static get is() {
         return 'shop-tab'
       }
-
     }
 
     customElements.define(ShopTab.is, ShopTab);
 
   </script>
+
 </dom-module>
