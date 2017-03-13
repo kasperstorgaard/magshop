@@ -104,7 +104,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         const fromOpacity = oldTarget ? 1 : 0;
         const toOpacity = newTarget ? 1 : 0;
 
-        Polymer.dom.flush();
         const thisRect = this.getBoundingClientRect();
         const thisStyle = window.getComputedStyle(this);
         const fromRect = from.getBoundingClientRect();
@@ -117,7 +116,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.style.transitionProperty = 'none';
           this.style.opacity = toOpacity;
           this._transitionsInFlight = [];
-          window.requestAnimationFrame(this._moveComplete.bind(this));
+          Polymer.Async.microTask.run(this._moveComplete.bind(this))
           return;
         } else {
           this.style.transitionProperty = '';
@@ -159,7 +158,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         this._transitionsInFlight.push(...newTransitions);
 
-        window.setTimeout(() => {
+        Polymer.Async.timeOut.run(() => {
           this.style.transitionDuration = durations.map(x => `${x}s`).join(', ');
           this.style.transitionDelay = delays.map(x => `${x}s`).join(', ');
 

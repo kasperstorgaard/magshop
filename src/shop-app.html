@@ -416,7 +416,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (shouldResetLayout) {
           // The size of the header depends on the page (e.g. on some pages the tabs
           // do not appear), so reset the header's layout only when switching pages.
-          window.requestAnimationFrame(() => {
+          Polymer.Async.timeOut.run(() => {
             this.$.header.resetLayout();
           });
         }
